@@ -9,8 +9,8 @@
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MainComponent.h"
 
+Component* createMainContentComponent();
 
 //==============================================================================
 class SoftSynthApplication  : public JUCEApplication
@@ -67,7 +67,8 @@ public:
                                                     DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainContentComponent(), true);
+            setContentOwned (createMainContentComponent(), true);
+            setResizable (true, true);
 
             centreWithSize (getWidth(), getHeight());
             setVisible (true);
