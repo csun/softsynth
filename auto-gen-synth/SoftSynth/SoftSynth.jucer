@@ -3,7 +3,7 @@
 <JUCERPROJECT id="hPrd2w" name="SoftSynth" displaySplashScreen="1" reportAppUsage="1"
               splashScreenColour="Dark" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.SoftSynth" includeBinaryInAppConfig="1"
-              cppLanguageStandard="11" jucerVersion="5.2.0" companyCopyright="">
+              cppLanguageStandard="11" jucerVersion="5.1.2" companyCopyright="">
   <MAINGROUP id="d5wNj8" name="SoftSynth">
     <GROUP id="{FE2D0968-C28F-482A-8388-FE4D147ED282}" name="Source">
       <FILE id="uyuDoA" name="MainComponent.cpp" compile="1" resource="0"
