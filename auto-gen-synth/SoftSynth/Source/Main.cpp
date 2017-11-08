@@ -1,16 +1,6 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic startup code for a Juce application.
-
-  ==============================================================================
-*/
-
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MainContentComponent.h"
 
-Component* createMainContentComponent();
 
 //==============================================================================
 class SoftSynthApplication  : public JUCEApplication
@@ -67,7 +57,7 @@ public:
                                                     DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (createMainContentComponent(), true);
+            setContentOwned (new MainContentComponent(), true);
             setResizable (true, true);
 
             centreWithSize (getWidth(), getHeight());
