@@ -3,12 +3,13 @@
 <JUCERPROJECT id="hPrd2w" name="SoftSynth" displaySplashScreen="1" reportAppUsage="1"
               splashScreenColour="Dark" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.SoftSynth" includeBinaryInAppConfig="1"
-              cppLanguageStandard="11" jucerVersion="5.1.2" companyCopyright="">
+              cppLanguageStandard="11" jucerVersion="5.2.0" companyCopyright="">
   <MAINGROUP id="d5wNj8" name="SoftSynth">
     <GROUP id="{FE2D0968-C28F-482A-8388-FE4D147ED282}" name="Source">
-      <FILE id="uyuDoA" name="MainComponent.cpp" compile="1" resource="0"
-            file="Source/MainComponent.cpp"/>
-      <FILE id="gI1KdS" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="uyuDoA" name="MainContentComponent.cpp" compile="1" resource="0"
+            file="Source/MainContentComponent.cpp"/>
+      <FILE id="gI1KdS" name="MainContentComponent.h" compile="0" resource="0"
+            file="Source/MainContentComponent.h"/>
       <FILE id="ZQc0XH" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
@@ -28,7 +29,6 @@
         <MODULEPATH id="juce_gui_basics" path="../modules"/>
         <MODULEPATH id="juce_gui_extra" path="../modules"/>
         <MODULEPATH id="juce_cryptography" path="../modules"/>
-        <MODULEPATH id="juce_video" path="../modules"/>
         <MODULEPATH id="juce_opengl" path="../modules"/>
         <MODULEPATH id="juce_audio_basics" path="../modules"/>
         <MODULEPATH id="juce_audio_devices" path="../modules"/>
@@ -45,7 +45,6 @@
                        optimisation="3" linkTimeOptimisation="1" targetName="SoftSynth"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_video" path="../modules"/>
         <MODULEPATH id="juce_opengl" path="../modules"/>
         <MODULEPATH id="juce_gui_extra" path="../modules"/>
         <MODULEPATH id="juce_gui_basics" path="../modules"/>
@@ -61,6 +60,29 @@
         <MODULEPATH id="juce_audio_utils" path="../../../../../JUCE/modules"/>
       </MODULEPATHS>
     </CODEBLOCKS_WINDOWS>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile" enableGNUExtensions="0">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" linkTimeOptimisation="0"
+                       targetName="SoftSynth"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" linkTimeOptimisation="1"
+                       targetName="SoftSynth"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_opengl" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
@@ -76,7 +98,6 @@
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
-  <JUCEOPTIONS/>
+  <JUCEOPTIONS JUCE_WEB_BROWSER="disabled"/>
 </JUCERPROJECT>
