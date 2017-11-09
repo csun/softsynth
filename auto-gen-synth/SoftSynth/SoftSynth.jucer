@@ -6,11 +6,15 @@
               cppLanguageStandard="11" jucerVersion="5.2.0" companyCopyright="">
   <MAINGROUP id="d5wNj8" name="SoftSynth">
     <GROUP id="{FE2D0968-C28F-482A-8388-FE4D147ED282}" name="Source">
-      <FILE id="uyuDoA" name="MainContentComponent.cpp" compile="1" resource="0"
+      <FILE id="RfJDtq" name="FilterProcessor.cpp" compile="1" resource="0"
+            file="Source/FilterProcessor.cpp"/>
+      <FILE id="S6kzjH" name="FilterProcessor.h" compile="0" resource="0"
+            file="Source/FilterProcessor.h"/>
+      <FILE id="AWWfKf" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="Dwvyr7" name="MainContentComponent.cpp" compile="1" resource="0"
             file="Source/MainContentComponent.cpp"/>
-      <FILE id="gI1KdS" name="MainContentComponent.h" compile="0" resource="0"
+      <FILE id="RkfTFf" name="MainContentComponent.h" compile="0" resource="0"
             file="Source/MainContentComponent.h"/>
-      <FILE id="ZQc0XH" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
