@@ -1,7 +1,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainContentComponent.h"
 
-
+Component* createMainContentComponent();
 //==============================================================================
 class SoftSynthApplication  : public JUCEApplication
 {
