@@ -44,6 +44,8 @@ public:
 
     void handleNoteOff (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float /*velocity*/) override;
 
+	double getFrequency(MidiMessage m);
+
     // This is used to dispach an incoming message to the message thread
     class IncomingMessageCallback   : public CallbackMessage
     {

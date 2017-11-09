@@ -1,7 +1,9 @@
 #include "MainContentComponent.h"
+#include "Windows.h"
+#include <iostream>
 
 MainContentComponent::MainContentComponent() : 
-    currentSampleRate (0.0),
+    currentSampleRate (44100.0),
     currentAngle (0.0), 
     angleDelta (0.0),
     lastInputIndex(0),
@@ -22,7 +24,7 @@ MainContentComponent::MainContentComponent() :
     levelLabel.attachToComponent (&levelSlider, true);
 
     addAndMakeVisible (frequencySlider);
-    frequencySlider.setRange (50.0, 5000.0);
+    frequencySlider.setRange (0.0, 5000.0);
     frequencySlider.setSkewFactorFromMidPoint (500.0); // [4]
     frequencySlider.addListener (this);
 
@@ -36,7 +38,7 @@ MainContentComponent::MainContentComponent() :
     addAndMakeVisible(filterComponent);
 
     levelSlider.setValue (0.125);
-    frequencySlider.setValue(200.0);
+    frequencySlider.setValue(0.0);
     
     
     //Midi initialization
@@ -83,13 +85,12 @@ MainContentComponent::MainContentComponent() :
 MainContentComponent::~MainContentComponent()
 {
     shutdownAudio();
-<<<<<<< HEAD
+
     keyboardState.removeListener (this);
     deviceManager.removeMidiInputCallback (MidiInput::getDevices()[midiInputList.getSelectedItemIndex()], this);
     midiInputList.removeListener (this);
-=======
+
     delete filterComponent;
->>>>>>> 7b7fc7a43627101627b6cb8056f6a8a77a61df8c
 }
 
 
@@ -232,6 +233,7 @@ void MainContentComponent::handleNoteOn (MidiKeyboardState*, int midiChannel, in
         MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
+		frequencySlider.setValue(getFrequency(m));
     }
 	
 }
@@ -242,8 +244,20 @@ void MainContentComponent::handleNoteOff (MidiKeyboardState*, int midiChannel, i
         MidiMessage m (MidiMessage::noteOff (midiChannel, midiNoteNumber));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
+		frequencySlider.setValue(0.0);  // No notes pressed so we turn it off
     }
 }
+
+double MainContentComponent::getFrequency(MidiMessage m){
+
+
+	double hz = m.getMidiNoteInHertz(m.getNoteNumber());
+//	std::string str = std::to_string(hz);
+//	OutputDebugStringA(str);
+	return hz;
+
+}
+
 
 void MainContentComponent::postMessageToList (const MidiMessage& message, const String& source)
 {
