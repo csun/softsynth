@@ -6,8 +6,8 @@
 
 
 FilterProcessor::FilterProcessor() {
-  addParameter(cutoff = new AudioParameterFloat("cutoff", "Cutoff", 0.0f, 20000.0f, 1000.0f));
-  addParameter(resonance = new AudioParameterFloat("resonance", "Resonance", 0.707f, 4.0f, 33.0f));
+  addParameter(cutoff = new AudioParameterFloat("cutoff", "Cutoff", 0.0f, 10000.0f, 1000.0f));
+  addParameter(resonance = new AudioParameterFloat("resonance", "Resonance", 0.707f, 10.0f, 4.0f));
   addParameter(isLpf = new AudioParameterBool("isLpf", "Low Pass", true));
 
   // NOTE Because of the way the algorithm works, both the in and out delay lines

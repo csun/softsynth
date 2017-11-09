@@ -22,8 +22,12 @@ MainContentComponent::MainContentComponent() : currentSampleRate (0.0),
 
     addAndMakeVisible (frequencyLabel);
     frequencyLabel.setText ("Frequency", dontSendNotification);
-    frequencyLabel.attachToComponent (&levelSlider, true);
+    frequencyLabel.attachToComponent (&frequencySlider, true);
     frequencySlider.setTextValueSuffix (" Hz");
+
+    filterComponent = filter.createEditor();
+    filterComponent->setBounds(getLocalBounds().removeFromBottom(200));
+    addAndMakeVisible(filterComponent);
 
     levelSlider.setValue (0.125);
     frequencySlider.setValue(200.0);
@@ -32,6 +36,7 @@ MainContentComponent::MainContentComponent() : currentSampleRate (0.0),
 MainContentComponent::~MainContentComponent()
 {
     shutdownAudio();
+    delete filterComponent;
 }
 
 

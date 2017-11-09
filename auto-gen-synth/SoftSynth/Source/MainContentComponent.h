@@ -35,6 +35,7 @@ protected:
 
     FilterProcessor filter;
 
+    Component *filterComponent;
     Slider levelSlider;
     Label levelLabel;
     Slider frequencySlider;
