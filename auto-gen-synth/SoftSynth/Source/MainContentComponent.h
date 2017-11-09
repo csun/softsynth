@@ -2,18 +2,23 @@
 #define _MAINCONTENTCOMPONENT_H_
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "FilterProcessor.h"
 
 
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
+<<<<<<< HEAD
 class MainContentComponent   : 
 	public AudioAppComponent, 
 	public Slider::Listener,
 	private ComboBox::Listener,
 	private MidiInputCallback,
 	private MidiKeyboardStateListener
+=======
+class MainContentComponent : public AudioAppComponent, public Slider::Listener
+>>>>>>> 7b7fc7a43627101627b6cb8056f6a8a77a61df8c
 {
 public:
     MainContentComponent();
@@ -74,13 +79,16 @@ public:
 protected:
     void updateAngleDelta();
 
+    FilterProcessor filter;
 
+    Component *filterComponent;
     Slider levelSlider;
     Label levelLabel;
     Slider frequencySlider;
     Label frequencyLabel;
     double currentSampleRate, currentAngle, angleDelta;
 
+<<<<<<< HEAD
 private:
     AudioDeviceManager deviceManager;
     ComboBox midiInputList;
@@ -93,6 +101,8 @@ private:
     double startTime;
 
 
+=======
+>>>>>>> 7b7fc7a43627101627b6cb8056f6a8a77a61df8c
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
 

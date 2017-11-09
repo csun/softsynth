@@ -12,7 +12,7 @@ MainContentComponent::MainContentComponent() :
     setSize (800, 600);
 
     // specify the number of input and output channels that we want to open
-    setAudioChannels (0, 2);
+    setAudioChannels (0, 1);
 
     addAndMakeVisible (levelSlider);
     levelSlider.setRange (0, 100);
@@ -27,11 +27,15 @@ MainContentComponent::MainContentComponent() :
     frequencySlider.addListener (this);
 
     addAndMakeVisible (frequencyLabel);
-    levelLabel.setText ("Frequency", dontSendNotification);
-    levelLabel.attachToComponent (&levelSlider, true);
+    frequencyLabel.setText ("Frequency", dontSendNotification);
+    frequencyLabel.attachToComponent (&frequencySlider, true);
     frequencySlider.setTextValueSuffix (" Hz");
 
-    levelSlider.setValue (20.0);
+    filterComponent = filter.createEditor();
+    filterComponent->setBounds(getLocalBounds().removeFromBottom(200));
+    addAndMakeVisible(filterComponent);
+
+    levelSlider.setValue (0.125);
     frequencySlider.setValue(200.0);
     
     
@@ -79,22 +83,19 @@ MainContentComponent::MainContentComponent() :
 MainContentComponent::~MainContentComponent()
 {
     shutdownAudio();
+<<<<<<< HEAD
     keyboardState.removeListener (this);
     deviceManager.removeMidiInputCallback (MidiInput::getDevices()[midiInputList.getSelectedItemIndex()], this);
     midiInputList.removeListener (this);
+=======
+    delete filterComponent;
+>>>>>>> 7b7fc7a43627101627b6cb8056f6a8a77a61df8c
 }
 
 
 void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-
-    // For more details, see the help for AudioProcessor::prepareToPlay()
-
+    filter.prepareToPlay(sampleRate, samplesPerBlockExpected);
     currentSampleRate = sampleRate;
     updateAngleDelta();
 }
@@ -103,17 +104,18 @@ void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& buff
 {
     const float level = (float) levelSlider.getValue();
 
-    for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel) {
-        // Get a pointer to the start sample in the buffer for this audio output channel
-        float* const buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
+    // Get a pointer to the start sample in the buffer for this audio output channel
+    // NOTE this synth is mono, so there will only ever be one channel.
+    float* const buffer = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
 
-        // Fill the required number of samples with noise betweem -0.125 and +0.125
-        for (int sample = 0; sample < bufferToFill.numSamples; ++sample) {
-            const float currentSample = (float) std::sin (currentAngle);
-            currentAngle += angleDelta;
-            buffer[sample] = currentSample * level;
-        }
+    for (int sample = 0; sample < bufferToFill.numSamples; ++sample) {
+        const float currentSample = (float) std::sin (currentAngle);
+        currentAngle += angleDelta;
+        buffer[sample] = currentSample * level;
     }
+
+    MidiBuffer dummyMidi;
+    filter.processBlock(*bufferToFill.buffer, dummyMidi);
 }
 
 void MainContentComponent::releaseResources()
@@ -124,6 +126,7 @@ void MainContentComponent::releaseResources()
     // For more details, see the help for AudioProcessor::releaseResources()
 
     Logger::getCurrentLogger()->writeToLog ("Releasing audio resources");
+    filter.releaseResources();
 }
 
 void MainContentComponent::sliderValueChanged (Slider* slider)
