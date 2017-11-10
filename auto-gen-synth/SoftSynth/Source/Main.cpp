@@ -1,5 +1,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainContentComponent.h"
+#include "FilterProcessor.h"
 
 Component* createMainContentComponent();
 //==============================================================================

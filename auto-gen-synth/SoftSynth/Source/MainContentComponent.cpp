@@ -1,6 +1,4 @@
 #include "MainContentComponent.h"
-#include "Windows.h"
-#include <iostream>
 
 MainContentComponent::MainContentComponent() : 
     currentSampleRate (44100.0),
@@ -17,7 +15,7 @@ MainContentComponent::MainContentComponent() :
     setAudioChannels (0, 1);
 
     addAndMakeVisible (levelSlider);
-    levelSlider.setRange (0, 100);
+    levelSlider.setRange (0, 1);
 
     addAndMakeVisible (levelLabel);
     levelLabel.setText ("Volume", dontSendNotification);
