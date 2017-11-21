@@ -1,13 +1,12 @@
 #include "MainContentComponent.h"
 
-MainContentComponent::MainContentComponent() : 
+MainContentComponent::MainContentComponent() :
     currentSampleRate (44100.0),
-    currentAngle (0.0), 
-    angleDelta (0.0),
     lastInputIndex(0),
     isAddingFromMidiInput(false),
     keyboardComponent (keyboardState, MidiKeyboardComponent::horizontalKeyboard),
-    startTime (Time::getMillisecondCounterHiRes() * 0.001)
+    startTime (Time::getMillisecondCounterHiRes() * 0.001),
+    activeToneGenerator(sineToneGenerator)
 {
     setSize (800, 600);
 
@@ -21,26 +20,15 @@ MainContentComponent::MainContentComponent() :
     levelLabel.setText ("Volume", dontSendNotification);
     levelLabel.attachToComponent (&levelSlider, true);
 
-    addAndMakeVisible (frequencySlider);
-    frequencySlider.setRange (0.0, 5000.0);
-    frequencySlider.setSkewFactorFromMidPoint (500.0); // [4]
-    frequencySlider.addListener (this);
-
-    addAndMakeVisible (frequencyLabel);
-    frequencyLabel.setText ("Frequency", dontSendNotification);
-    frequencyLabel.attachToComponent (&frequencySlider, true);
-    frequencySlider.setTextValueSuffix (" Hz");
-
     filterComponent = filter.createEditor();
     filterComponent->setBounds(getLocalBounds().removeFromBottom(200));
     addAndMakeVisible(filterComponent);
 
     levelSlider.setValue (0.125);
-    frequencySlider.setValue(0.0);
-    
-    
+
+
     //Midi initialization
-    
+
     setOpaque (true);
 
     addAndMakeVisible (midiInputListLabel);
@@ -77,7 +65,8 @@ MainContentComponent::MainContentComponent() :
     midiMessagesBox.setColour (TextEditor::backgroundColourId, Colour (0x32ffffff));
     midiMessagesBox.setColour (TextEditor::outlineColourId, Colour (0x1c000000));
     midiMessagesBox.setColour (TextEditor::shadowColourId, Colour (0x16000000));
-    
+
+    updateToneGenerator(sineToneGenerator);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -96,7 +85,9 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
 {
     filter.prepareToPlay(sampleRate, samplesPerBlockExpected);
     currentSampleRate = sampleRate;
-    updateAngleDelta();
+
+    // Needed to refresh samplerate and reset playback
+    updateToneGenerator(activeToneGenerator);
 }
 
 void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
@@ -108,9 +99,7 @@ void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& buff
     float* const buffer = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
 
     for (int sample = 0; sample < bufferToFill.numSamples; ++sample) {
-        const float currentSample = (float) std::sin (currentAngle);
-        currentAngle += angleDelta;
-        buffer[sample] = currentSample * level;
+        buffer[sample] = activeToneGenerator.getSample() * level;
     }
 
     MidiBuffer dummyMidi;
@@ -128,13 +117,7 @@ void MainContentComponent::releaseResources()
     filter.releaseResources();
 }
 
-void MainContentComponent::sliderValueChanged (Slider* slider)
-{
-    if (slider == &frequencySlider)
-    {
-        if (currentSampleRate > 0.0)
-            updateAngleDelta();
-    }
+void MainContentComponent::sliderValueChanged (Slider* slider) {
 }
 
 
@@ -147,7 +130,6 @@ void MainContentComponent::resized()
 {
     const int sliderLeft = 120;
     levelSlider.setBounds (sliderLeft, 20, getWidth() - sliderLeft - 10, 20);
-    frequencySlider.setBounds (sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
     //midi resize functions
     Rectangle<int> area (getLocalBounds());
     midiInputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
@@ -155,10 +137,10 @@ void MainContentComponent::resized()
     midiMessagesBox.setBounds (area.reduced (8));
 }
 
-void MainContentComponent::updateAngleDelta()
-{
-    const double cyclesPerSample = frequencySlider.getValue() / currentSampleRate; // [2]
-    angleDelta = cyclesPerSample * 2.0 * double_Pi;                                // [3]
+void MainContentComponent::updateToneGenerator(ToneGenerator &toneGenerator) {
+  activeToneGenerator = toneGenerator;
+  toneGenerator.setSampleRate(currentSampleRate);
+  toneGenerator.setFrequency(0);
 }
 
 
@@ -231,9 +213,8 @@ void MainContentComponent::handleNoteOn (MidiKeyboardState*, int midiChannel, in
         MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
-		frequencySlider.setValue(getFrequency(m));
+        activeToneGenerator.setFrequency(getFrequency(m));
     }
-	
 }
 
 void MainContentComponent::handleNoteOff (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float /*velocity*/) {
@@ -242,18 +223,15 @@ void MainContentComponent::handleNoteOff (MidiKeyboardState*, int midiChannel, i
         MidiMessage m (MidiMessage::noteOff (midiChannel, midiNoteNumber));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
-		frequencySlider.setValue(0.0);  // No notes pressed so we turn it off
+        activeToneGenerator.setFrequency(0.0);
     }
 }
 
 double MainContentComponent::getFrequency(MidiMessage m){
-
-
 	double hz = m.getMidiNoteInHertz(m.getNoteNumber());
 //	std::string str = std::to_string(hz);
 //	OutputDebugStringA(str);
 	return hz;
-
 }
 
 

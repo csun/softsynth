@@ -3,14 +3,16 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "FilterProcessor.h"
+#include "ToneGenerator.hpp"
+#include "SineToneGenerator.hpp"
 
 
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainContentComponent   : 
-	public AudioAppComponent, 
+class MainContentComponent   :
+	public AudioAppComponent,
 	public Slider::Listener,
 	private ComboBox::Listener,
 	private MidiInputCallback,
@@ -68,24 +70,23 @@ public:
     void postMessageToList (const MidiMessage& message, const String& source);
 
     void addMessageToList (const MidiMessage& message, const String& source);
-    
-
 
     void paint (Graphics& g) override;
     void resized() override;
-    
+
 protected:
-    void updateAngleDelta();
+    void updateToneGenerator(ToneGenerator &toneGenerator);
 
     FilterProcessor filter;
 
     Component *filterComponent;
     Slider levelSlider;
     Label levelLabel;
-    Slider frequencySlider;
-    Label frequencyLabel;
-    double currentSampleRate, currentAngle, angleDelta;
-    
+    double currentSampleRate;
+
+    ToneGenerator &activeToneGenerator;
+    SineToneGenerator sineToneGenerator;
+
 private:
     AudioDeviceManager deviceManager;
     ComboBox midiInputList;
@@ -96,7 +97,7 @@ private:
     MidiKeyboardComponent keyboardComponent;
     TextEditor midiMessagesBox;
     double startTime;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
 

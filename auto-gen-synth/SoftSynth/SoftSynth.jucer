@@ -7,7 +7,7 @@
   <MAINGROUP id="d5wNj8" name="SoftSynth">
     <GROUP id="{FE2D0968-C28F-482A-8388-FE4D147ED282}" name="Source">
       <FILE id="RfJDtq" name="FilterProcessor.cpp" compile="1" resource="0"
-            file="Source/FilterProcessor.cpp"/>
+            file="Source/FilterProcessor.cpp" xcodeResource="0"/>
       <FILE id="S6kzjH" name="FilterProcessor.h" compile="0" resource="0"
             file="Source/FilterProcessor.h"/>
       <FILE id="AWWfKf" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
@@ -15,6 +15,10 @@
             file="Source/MainContentComponent.cpp"/>
       <FILE id="RkfTFf" name="MainContentComponent.h" compile="0" resource="0"
             file="Source/MainContentComponent.h"/>
+      <FILE id="ToneGe" name="ToneGenerator.hpp" compile="1" resource="0"
+            file="Source/ToneGenerator.hpp"/>
+      <FILE id="SineTg" name="SineToneGenerator.hpp" compile="1" resource="0"
+            file="Source/SineToneGenerator.hpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
