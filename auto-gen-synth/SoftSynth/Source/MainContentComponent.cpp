@@ -6,6 +6,7 @@ MainContentComponent::MainContentComponent() :
     isAddingFromMidiInput(false),
     keyboardComponent (keyboardState, MidiKeyboardComponent::horizontalKeyboard),
     startTime (Time::getMillisecondCounterHiRes() * 0.001),
+    activeMidiNote(-1),
     activeToneGenerator(sineToneGenerator)
 {
     setSize (800, 600);
@@ -214,6 +215,7 @@ void MainContentComponent::handleNoteOn (MidiKeyboardState*, int midiChannel, in
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
         activeToneGenerator.setFrequency(getFrequency(m));
+        activeMidiNote = midiNoteNumber;
     }
 }
 
@@ -223,7 +225,11 @@ void MainContentComponent::handleNoteOff (MidiKeyboardState*, int midiChannel, i
         MidiMessage m (MidiMessage::noteOff (midiChannel, midiNoteNumber));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
-        activeToneGenerator.setFrequency(0.0);
+        if(activeMidiNote == midiNoteNumber) {
+          // If note off message is sent for a different note than the one actually
+          // playing, ignore it.
+          activeToneGenerator.setFrequency(0.0);
+        }
     }
 }
 

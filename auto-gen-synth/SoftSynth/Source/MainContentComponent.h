@@ -84,6 +84,7 @@ protected:
     Label levelLabel;
     double currentSampleRate;
 
+    int activeMidiNote;
     ToneGenerator &activeToneGenerator;
     SineToneGenerator sineToneGenerator;
 
