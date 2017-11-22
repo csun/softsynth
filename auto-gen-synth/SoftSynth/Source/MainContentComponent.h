@@ -2,6 +2,7 @@
 #define _MAINCONTENTCOMPONENT_H_
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include <map>
 #include "FilterProcessor.h"
 #include "ToneGenerator.hpp"
 #include "SineToneGenerator.hpp"
@@ -86,6 +87,8 @@ protected:
     double currentSampleRate;
 
     int activeMidiNote;
+
+    std::map<String, ToneGenerator*> waveformMap;
     SawToneGenerator sawToneGenerator;
     SineToneGenerator sineToneGenerator;
     ToneGenerator *activeToneGenerator;
@@ -93,6 +96,7 @@ protected:
 private:
     AudioDeviceManager deviceManager;
     ComboBox midiInputList;
+    ComboBox waveformList;
     Label midiInputListLabel;
     int lastInputIndex;
     bool isAddingFromMidiInput;

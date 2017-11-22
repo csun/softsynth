@@ -27,6 +27,17 @@ MainContentComponent::MainContentComponent() :
     midiInputListLabel.setText ("MIDI Input:", dontSendNotification);
     midiInputListLabel.attachToComponent (&midiInputList, true);
 
+    waveformMap[String("Sine")] = &sineToneGenerator;
+    waveformMap[String("Saw")] = &sawToneGenerator;
+    addAndMakeVisible (waveformList);
+    int nextId = 1;
+    for(auto it = waveformMap.begin(); it != waveformMap.end(); it++) {
+      waveformList.addItem(it->first, nextId);
+      nextId++;
+    }
+    waveformList.addListener(this);
+    waveformList.setSelectedId(1);
+
     addAndMakeVisible (midiInputList);
     midiInputList.setTextWhenNoChoicesAvailable ("No MIDI Inputs Enabled");
     const StringArray midiInputs (MidiInput::getDevices());
@@ -35,8 +46,7 @@ MainContentComponent::MainContentComponent() :
     // find the first enabled device and use that by default
     for (int i = 0; i < midiInputs.size(); ++i)
     {
-        if (deviceManager.isMidiInputEnabled (midiInputs[i]))
-        {
+        if (deviceManager.isMidiInputEnabled (midiInputs[i])) {
             setMidiInput (i);
               break;
         }
@@ -60,8 +70,6 @@ MainContentComponent::MainContentComponent() :
 
     setOpaque (true);
     setSize (800, 600);
-
-    updateToneGenerator(&sawToneGenerator);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -71,6 +79,7 @@ MainContentComponent::~MainContentComponent()
     keyboardState.removeListener (this);
     deviceManager.removeMidiInputCallback (MidiInput::getDevices()[midiInputList.getSelectedItemIndex()], this);
     midiInputList.removeListener (this);
+    waveformList.removeListener (this);
 
     delete filterComponent;
 }
@@ -130,6 +139,7 @@ void MainContentComponent::resized()
     keyboardComponent.setBounds (area.removeFromTop (80).reduced(8));
     midiMessagesBox.setBounds (area.removeFromTop(80).reduced (8));
     levelSlider.setBounds(area.removeFromTop(36));
+    waveformList.setBounds(area.removeFromTop(36));
     filterComponent->setBounds(area.removeFromTop(160));
 }
 
@@ -190,8 +200,13 @@ void MainContentComponent::setMidiInput (int index)
 
 void MainContentComponent::comboBoxChanged (ComboBox* box)
 {
-    if (box == &midiInputList)
-        setMidiInput (midiInputList.getSelectedItemIndex());
+    if (box == &midiInputList) {
+      setMidiInput (midiInputList.getSelectedItemIndex());
+    }
+    else if (box == &waveformList) {
+      updateToneGenerator(waveformMap[
+          waveformList.getItemText(waveformList.getSelectedItemIndex())]);
+    }
 }
 
 // These methods handle callbacks from the midi device + on-screen keyboard..
