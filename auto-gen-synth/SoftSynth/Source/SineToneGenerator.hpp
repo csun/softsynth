@@ -7,12 +7,15 @@
 class SineToneGenerator : public ToneGenerator {
   public:
     SineToneGenerator() : angleDelta(0), currentAngle(0) {}
+
     virtual double getSample() override {
       double output = std::sin(currentAngle);
       currentAngle = fmod(currentAngle + angleDelta, 2 * M_PI);
+
+      return output;
     }
 
-    virtual void setFrequency(double frequency) {
+    virtual void setFrequency(double frequency) override {
       currentAngle = 0;
       angleDelta = (frequency / sampleRate) * 2 * M_PI;
     }

@@ -5,6 +5,7 @@
 #include "FilterProcessor.h"
 #include "ToneGenerator.hpp"
 #include "SineToneGenerator.hpp"
+#include "SawToneGenerator.hpp"
 
 
 /*
@@ -75,7 +76,7 @@ public:
     void resized() override;
 
 protected:
-    void updateToneGenerator(ToneGenerator &toneGenerator);
+    void updateToneGenerator(ToneGenerator *toneGenerator);
 
     FilterProcessor filter;
 
@@ -85,8 +86,9 @@ protected:
     double currentSampleRate;
 
     int activeMidiNote;
-    ToneGenerator &activeToneGenerator;
+    SawToneGenerator sawToneGenerator;
     SineToneGenerator sineToneGenerator;
+    ToneGenerator *activeToneGenerator;
 
 private:
     AudioDeviceManager deviceManager;

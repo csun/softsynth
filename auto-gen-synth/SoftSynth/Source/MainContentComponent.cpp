@@ -7,7 +7,7 @@ MainContentComponent::MainContentComponent() :
     keyboardComponent (keyboardState, MidiKeyboardComponent::horizontalKeyboard),
     startTime (Time::getMillisecondCounterHiRes() * 0.001),
     activeMidiNote(-1),
-    activeToneGenerator(sineToneGenerator)
+    activeToneGenerator(&sineToneGenerator)
 {
     setSize (800, 600);
 
@@ -67,7 +67,7 @@ MainContentComponent::MainContentComponent() :
     midiMessagesBox.setColour (TextEditor::outlineColourId, Colour (0x1c000000));
     midiMessagesBox.setColour (TextEditor::shadowColourId, Colour (0x16000000));
 
-    updateToneGenerator(sineToneGenerator);
+    updateToneGenerator(&sineToneGenerator);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -100,7 +100,7 @@ void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& buff
     float* const buffer = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
 
     for (int sample = 0; sample < bufferToFill.numSamples; ++sample) {
-        buffer[sample] = activeToneGenerator.getSample() * level;
+        buffer[sample] = std::max(0.0, std::min(1.0, activeToneGenerator->getSample() * level));
     }
 
     MidiBuffer dummyMidi;
@@ -138,10 +138,10 @@ void MainContentComponent::resized()
     midiMessagesBox.setBounds (area.reduced (8));
 }
 
-void MainContentComponent::updateToneGenerator(ToneGenerator &toneGenerator) {
+void MainContentComponent::updateToneGenerator(ToneGenerator *toneGenerator) {
   activeToneGenerator = toneGenerator;
-  toneGenerator.setSampleRate(currentSampleRate);
-  toneGenerator.setFrequency(0);
+  toneGenerator->setSampleRate(currentSampleRate);
+  toneGenerator->setFrequency(0);
 }
 
 
@@ -214,7 +214,7 @@ void MainContentComponent::handleNoteOn (MidiKeyboardState*, int midiChannel, in
         MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
-        activeToneGenerator.setFrequency(getFrequency(m));
+        activeToneGenerator->setFrequency(getFrequency(m));
         activeMidiNote = midiNoteNumber;
     }
 }
@@ -228,7 +228,7 @@ void MainContentComponent::handleNoteOff (MidiKeyboardState*, int midiChannel, i
         if(activeMidiNote == midiNoteNumber) {
           // If note off message is sent for a different note than the one actually
           // playing, ignore it.
-          activeToneGenerator.setFrequency(0.0);
+          activeToneGenerator->setFrequency(0.0);
         }
     }
 }
