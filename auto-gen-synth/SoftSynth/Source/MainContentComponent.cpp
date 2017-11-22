@@ -9,28 +9,19 @@ MainContentComponent::MainContentComponent() :
     activeMidiNote(-1),
     activeToneGenerator(&sineToneGenerator)
 {
-    setSize (800, 600);
-
     // specify the number of input and output channels that we want to open
     setAudioChannels (0, 1);
 
     addAndMakeVisible (levelSlider);
     levelSlider.setRange (0, 1);
+    levelSlider.setValue (0.125);
 
     addAndMakeVisible (levelLabel);
     levelLabel.setText ("Volume", dontSendNotification);
     levelLabel.attachToComponent (&levelSlider, true);
 
     filterComponent = filter.createEditor();
-    filterComponent->setBounds(getLocalBounds().removeFromBottom(200));
     addAndMakeVisible(filterComponent);
-
-    levelSlider.setValue (0.125);
-
-
-    //Midi initialization
-
-    setOpaque (true);
 
     addAndMakeVisible (midiInputListLabel);
     midiInputListLabel.setText ("MIDI Input:", dontSendNotification);
@@ -67,7 +58,10 @@ MainContentComponent::MainContentComponent() :
     midiMessagesBox.setColour (TextEditor::outlineColourId, Colour (0x1c000000));
     midiMessagesBox.setColour (TextEditor::shadowColourId, Colour (0x16000000));
 
-    updateToneGenerator(&sineToneGenerator);
+    setOpaque (true);
+    setSize (800, 600);
+
+    updateToneGenerator(&sawToneGenerator);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -129,13 +123,14 @@ void MainContentComponent::paint (Graphics& g)
 
 void MainContentComponent::resized()
 {
-    const int sliderLeft = 120;
-    levelSlider.setBounds (sliderLeft, 20, getWidth() - sliderLeft - 10, 20);
-    //midi resize functions
     Rectangle<int> area (getLocalBounds());
+
+    //midi resize functions
     midiInputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
     keyboardComponent.setBounds (area.removeFromTop (80).reduced(8));
-    midiMessagesBox.setBounds (area.reduced (8));
+    midiMessagesBox.setBounds (area.removeFromTop(80).reduced (8));
+    levelSlider.setBounds(area.removeFromTop(36));
+    filterComponent->setBounds(area.removeFromTop(160));
 }
 
 void MainContentComponent::updateToneGenerator(ToneGenerator *toneGenerator) {
