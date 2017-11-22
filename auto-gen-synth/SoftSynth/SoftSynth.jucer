@@ -21,6 +21,8 @@
             file="Source/SineToneGenerator.hpp"/>
       <FILE id="SawTGe" name="SawToneGenerator.hpp" compile="1" resource="0"
             file="Source/SawToneGenerator.hpp"/>
+      <FILE id="SquTGe" name="SquareToneGenerator.hpp" compile="1" resource="0"
+            file="Source/SquareToneGenerator.hpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

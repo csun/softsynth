@@ -7,6 +7,7 @@
 #include "ToneGenerator.hpp"
 #include "SineToneGenerator.hpp"
 #include "SawToneGenerator.hpp"
+#include "SquareToneGenerator.hpp"
 
 
 /*
@@ -90,6 +91,7 @@ protected:
 
     std::map<String, ToneGenerator*> waveformMap;
     SawToneGenerator sawToneGenerator;
+    SquareToneGenerator squareToneGenerator;
     SineToneGenerator sineToneGenerator;
     ToneGenerator *activeToneGenerator;
 

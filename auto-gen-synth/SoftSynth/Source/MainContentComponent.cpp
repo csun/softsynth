@@ -29,6 +29,7 @@ MainContentComponent::MainContentComponent() :
 
     waveformMap[String("Sine")] = &sineToneGenerator;
     waveformMap[String("Saw")] = &sawToneGenerator;
+    waveformMap[String("Square")] = &squareToneGenerator;
     addAndMakeVisible (waveformList);
     int nextId = 1;
     for(auto it = waveformMap.begin(); it != waveformMap.end(); it++) {
