@@ -15,10 +15,14 @@ MainContentComponent::MainContentComponent() :
     addAndMakeVisible (levelSlider);
     levelSlider.setRange (0, 1);
     levelSlider.setValue (0.125);
+	levelSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
+	levelSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+
 
     addAndMakeVisible (levelLabel);
-    levelLabel.setText ("Volume", dontSendNotification);
+    levelLabel.setText ("Volume", sendNotification);
     levelLabel.attachToComponent (&levelSlider, true);
+	levelLabel.setJustificationType(Justification::centredBottom);
 
     filterComponent = filter.createEditor();
     addAndMakeVisible(filterComponent);
@@ -37,7 +41,12 @@ MainContentComponent::MainContentComponent() :
       nextId++;
     }
     waveformList.addListener(this);
-    waveformList.setSelectedId(1);
+	waveformList.setSelectedId(1);
+
+	//add waveform label
+	addAndMakeVisible(waveLabel);
+	waveLabel.setText("Waveshape", sendNotification);
+	waveLabel.attachToComponent(&waveformList, true);
 
     addAndMakeVisible (midiInputList);
     midiInputList.setTextWhenNoChoicesAvailable ("No MIDI Inputs Enabled");
@@ -57,6 +66,7 @@ MainContentComponent::MainContentComponent() :
 
     addAndMakeVisible (keyboardComponent);
     keyboardState.addListener (this);
+	//keyboardComponent.setBounds(0, 550, 800, 50);
 
     addAndMakeVisible (midiMessagesBox);
     midiMessagesBox.setMultiLine (true);
@@ -70,7 +80,7 @@ MainContentComponent::MainContentComponent() :
     midiMessagesBox.setColour (TextEditor::shadowColourId, Colour (0x16000000));
 
     setOpaque (true);
-    setSize (800, 600);
+	setSize(700, 500);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -129,6 +139,8 @@ void MainContentComponent::sliderValueChanged (Slider* slider) {
 void MainContentComponent::paint (Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+	g.setFont(60.0f);
+	g.drawText("SoftSynth", getLocalBounds(), Justification::centred, true);
 }
 
 void MainContentComponent::resized()
@@ -136,12 +148,16 @@ void MainContentComponent::resized()
     Rectangle<int> area (getLocalBounds());
 
     //midi resize functions
-    midiInputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
-    keyboardComponent.setBounds (area.removeFromTop (80).reduced(8));
+    midiInputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 100).reduced (8));
+    keyboardComponent.setBounds(area.removeFromBottom(100).reduced(8));
     midiMessagesBox.setBounds (area.removeFromTop(80).reduced (8));
-    levelSlider.setBounds(area.removeFromTop(36));
-    waveformList.setBounds(area.removeFromTop(36));
-    filterComponent->setBounds(area.removeFromTop(160));
+	//levelLabel.setBounds(area.removeFromTop(90).removeFromRight(getWidth() - 20));
+	levelSlider.setBounds(area.removeFromTop(90).removeFromRight (getWidth()-70));
+	levelLabel.setJustificationType(Justification::centredLeft);
+	levelSlider.setSize(100, 100);
+	waveformList.setBounds(area.removeFromTop(90).removeFromRight(getWidth() - 95).removeFromLeft(getWidth() - 450));
+	waveformList.setSize(100, 50);
+	filterComponent->setBounds(area.removeFromBottom(75));
 }
 
 void MainContentComponent::updateToneGenerator(ToneGenerator *toneGenerator) {
@@ -213,7 +229,7 @@ void MainContentComponent::comboBoxChanged (ComboBox* box)
 // These methods handle callbacks from the midi device + on-screen keyboard..
 void MainContentComponent::handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message)
 {
-    const ScopedValueSetter<bool> scopedInputFlag (isAddingFromMidiInput, true);
+	const ScopedValueSetter<bool> scopedInputFlag(isAddingFromMidiInput, false);
     keyboardState.processNextMidiEvent (message);
     postMessageToList (message, source->getName());
 }

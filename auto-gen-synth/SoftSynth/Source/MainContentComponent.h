@@ -90,6 +90,7 @@ protected:
     int activeMidiNote;
 
     std::map<String, ToneGenerator*> waveformMap;
+	Label waveLabel;
     SawToneGenerator sawToneGenerator;
     SquareToneGenerator squareToneGenerator;
     SineToneGenerator sineToneGenerator;
