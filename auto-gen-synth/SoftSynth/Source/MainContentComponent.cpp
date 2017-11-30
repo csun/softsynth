@@ -139,8 +139,9 @@ void MainContentComponent::sliderValueChanged (Slider* slider) {
 void MainContentComponent::paint (Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-	g.setFont(60.0f);
-	g.drawText("SoftSynth", getLocalBounds(), Justification::centred, true);
+	g.setFont(Font("Helvetica", 60.0f, Font::bold));
+	g.setColour(Colours::limegreen);
+	g.drawText("SoftSynth", getLocalBounds().removeFromBottom(660).removeFromRight(300), Justification::centred, true);
 }
 
 void MainContentComponent::resized()
