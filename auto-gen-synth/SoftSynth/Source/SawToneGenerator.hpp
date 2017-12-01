@@ -7,6 +7,7 @@
 class SawToneGenerator : public ToneGenerator {
   public:
     SawToneGenerator() : sampleDelta(0), wavePosition(0) {}
+    ~SawToneGenerator() {}
 
     virtual double getSample() override {
       double output = wavePosition;

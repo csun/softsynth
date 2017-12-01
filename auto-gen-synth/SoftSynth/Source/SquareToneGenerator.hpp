@@ -7,6 +7,7 @@
 class SquareToneGenerator : public ToneGenerator {
   public:
     SquareToneGenerator() : sampleDelta(0), wavePosition(0) {}
+    ~SquareToneGenerator() {}
 
     virtual double getSample() override {
       double output = (wavePosition >= 0.5 ? 1.0 : 0.0);

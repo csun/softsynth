@@ -4,6 +4,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <map>
 #include "FilterProcessor.h"
+#include "DelayProcessor.h"
 #include "ToneGenerator.hpp"
 #include "SineToneGenerator.hpp"
 #include "SawToneGenerator.hpp"
@@ -49,7 +50,7 @@ public:
 
     void handleNoteOff (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float /*velocity*/) override;
 
-	double getFrequency(MidiMessage m);
+    double getFrequency(MidiMessage m);
 
     // This is used to dispach an incoming message to the message thread
     class IncomingMessageCallback   : public CallbackMessage
@@ -81,8 +82,10 @@ protected:
     void updateToneGenerator(ToneGenerator *toneGenerator);
 
     FilterProcessor filter;
+    DelayProcessor delay;
 
     Component *filterComponent;
+    Component *delayComponent;
     Slider levelSlider;
     Label levelLabel;
     double currentSampleRate;
@@ -90,7 +93,7 @@ protected:
     int activeMidiNote;
 
     std::map<String, ToneGenerator*> waveformMap;
-	Label waveLabel;
+    Label waveLabel;
     SawToneGenerator sawToneGenerator;
     SquareToneGenerator squareToneGenerator;
     SineToneGenerator sineToneGenerator;

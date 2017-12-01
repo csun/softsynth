@@ -7,6 +7,7 @@
 class ToneGenerator {
   public:
     ToneGenerator() : sampleRate(0) {}
+    virtual ~ToneGenerator() {}
 
     virtual double getSample()=0;
     virtual void setFrequency(double frequency)=0;

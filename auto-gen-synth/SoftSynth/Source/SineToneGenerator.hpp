@@ -7,6 +7,7 @@
 class SineToneGenerator : public ToneGenerator {
   public:
     SineToneGenerator() : angleDelta(0), currentAngle(0) {}
+    ~SineToneGenerator() {}
 
     virtual double getSample() override {
       double output = std::sin(currentAngle);

@@ -4,10 +4,10 @@ MainContentComponent::MainContentComponent() :
     currentSampleRate (44100.0),
     lastInputIndex(0),
     isAddingFromMidiInput(false),
-    keyboardComponent (keyboardState, MidiKeyboardComponent::horizontalKeyboard),
-    startTime (Time::getMillisecondCounterHiRes() * 0.001),
     activeMidiNote(-1),
-    activeToneGenerator(&sineToneGenerator)
+    keyboardComponent (keyboardState, MidiKeyboardComponent::horizontalKeyboard),
+    activeToneGenerator(&sineToneGenerator),
+    startTime (Time::getMillisecondCounterHiRes() * 0.001)
 {
     // specify the number of input and output channels that we want to open
     setAudioChannels (0, 1);
@@ -26,6 +26,9 @@ MainContentComponent::MainContentComponent() :
 
     filterComponent = filter.createEditor();
     addAndMakeVisible(filterComponent);
+
+    delayComponent = delay.createEditor();
+    addAndMakeVisible(delayComponent);
 
     addAndMakeVisible (midiInputListLabel);
     midiInputListLabel.setText ("MIDI Input:", dontSendNotification);
@@ -80,7 +83,7 @@ MainContentComponent::MainContentComponent() :
     midiMessagesBox.setColour (TextEditor::shadowColourId, Colour (0x16000000));
 
     setOpaque (true);
-	setSize(700, 500);
+    setSize(700, 700);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -93,12 +96,14 @@ MainContentComponent::~MainContentComponent()
     waveformList.removeListener (this);
 
     delete filterComponent;
+    delete delayComponent;
 }
 
 
 void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
     filter.prepareToPlay(sampleRate, samplesPerBlockExpected);
+    delay.prepareToPlay(sampleRate, samplesPerBlockExpected);
     currentSampleRate = sampleRate;
 
     // Needed to refresh samplerate and reset playback
@@ -119,6 +124,7 @@ void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& buff
 
     MidiBuffer dummyMidi;
     filter.processBlock(*bufferToFill.buffer, dummyMidi);
+    delay.processBlock(*bufferToFill.buffer, dummyMidi);
 }
 
 void MainContentComponent::releaseResources()
@@ -130,6 +136,7 @@ void MainContentComponent::releaseResources()
 
     Logger::getCurrentLogger()->writeToLog ("Releasing audio resources");
     filter.releaseResources();
+    delay.releaseResources();
 }
 
 void MainContentComponent::sliderValueChanged (Slider* slider) {
@@ -138,7 +145,7 @@ void MainContentComponent::sliderValueChanged (Slider* slider) {
 
 void MainContentComponent::paint (Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+  g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 	g.setFont(Font("Helvetica", 60.0f, Font::bold));
 	g.setColour(Colours::limegreen);
 	g.drawText("SoftSynth", getLocalBounds().removeFromBottom(660).removeFromRight(300), Justification::centred, true);
@@ -158,7 +165,8 @@ void MainContentComponent::resized()
 	levelSlider.setSize(100, 100);
 	waveformList.setBounds(area.removeFromTop(90).removeFromRight(getWidth() - 95).removeFromLeft(getWidth() - 450));
 	waveformList.setSize(100, 50);
-	filterComponent->setBounds(area.removeFromBottom(75));
+	filterComponent->setBounds(area.removeFromBottom(100).reduced(8));
+	delayComponent->setBounds(area.removeFromBottom(100).reduced(8));
 }
 
 void MainContentComponent::updateToneGenerator(ToneGenerator *toneGenerator) {
