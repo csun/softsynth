@@ -19,9 +19,8 @@ FilterProcessor::FilterProcessor() {
 }
 
 FilterProcessor::~FilterProcessor() {
-  delete cutoff;
-  delete resonance;
-  delete isLpf;
+  // NOTE Base class handles deletion of all parameters added with addParameter.
+  // We do not need to free them manually.
 }
 
 void FilterProcessor::prepareToPlay(double sampleRate, int samplesPerBlockExpected) {

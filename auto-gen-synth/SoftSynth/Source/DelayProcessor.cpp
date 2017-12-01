@@ -15,10 +15,8 @@ DelayProcessor::DelayProcessor() {
 }
 
 DelayProcessor::~DelayProcessor() {
-  delete time;
-  delete feedback;
-  delete mix;
-  delete isOn;
+  // NOTE Base class handles deletion of all parameters added with addParameter.
+  // We do not need to free them manually.
 }
 
 void DelayProcessor::prepareToPlay(double sampleRate, int samplesPerBlockExpected) {
