@@ -10,7 +10,7 @@ MainContentComponent::MainContentComponent() :
     startTime (Time::getMillisecondCounterHiRes() * 0.001)
 {
     // specify the number of input and output channels that we want to open
-    setAudioChannels (0, 1);
+    setAudioChannels (2, 2);
 
     addAndMakeVisible (levelSlider);
     levelSlider.setRange (0, 1);
@@ -148,7 +148,7 @@ void MainContentComponent::paint (Graphics& g)
   g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 	g.setFont(Font("Helvetica", 60.0f, Font::bold));
 	g.setColour(Colours::limegreen);
-	g.drawText("SoftSynth", getLocalBounds().removeFromBottom(660).removeFromRight(300), Justification::centred, true);
+	g.drawText("SoftSynth", getLocalBounds().removeFromBottom(680).removeFromRight(300), Justification::centred, true);
 }
 
 void MainContentComponent::resized()
@@ -166,7 +166,7 @@ void MainContentComponent::resized()
 	waveformList.setBounds(area.removeFromTop(90).removeFromRight(getWidth() - 95).removeFromLeft(getWidth() - 450));
 	waveformList.setSize(100, 50);
 	filterComponent->setBounds(area.removeFromBottom(100).reduced(8));
-	delayComponent->setBounds(area.removeFromBottom(100).reduced(8));
+	delayComponent->setBounds(area.removeFromBottom(116).reduced(8));
 }
 
 void MainContentComponent::updateToneGenerator(ToneGenerator *toneGenerator) {
