@@ -79,7 +79,15 @@ public:
     void resized() override;
 
 protected:
-    void updateToneGenerator(ToneGenerator *toneGenerator);
+    enum WaveType {
+      Sine,
+      Saw,
+      Square
+    };
+
+    CriticalSection playLock;
+    WaveType getActiveToneGenerator();
+    void clearToneGenerators();
 
     FilterProcessor filter;
     DelayProcessor delay;
@@ -90,14 +98,9 @@ protected:
     Label levelLabel;
     double currentSampleRate;
 
-    int activeMidiNote;
-
-    std::map<String, ToneGenerator*> waveformMap;
+    std::map<String, WaveType> waveformMap;
+    std::map<int, ToneGenerator*> noteToneGenerator;
     Label waveLabel;
-    SawToneGenerator sawToneGenerator;
-    SquareToneGenerator squareToneGenerator;
-    SineToneGenerator sineToneGenerator;
-    ToneGenerator *activeToneGenerator;
 
 private:
     AudioDeviceManager deviceManager;
@@ -110,7 +113,7 @@ private:
     MidiKeyboardComponent keyboardComponent;
     TextEditor midiMessagesBox;
     double startTime;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
 

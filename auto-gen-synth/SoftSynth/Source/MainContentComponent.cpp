@@ -4,13 +4,11 @@ MainContentComponent::MainContentComponent() :
     currentSampleRate (44100.0),
     lastInputIndex(0),
     isAddingFromMidiInput(false),
-    activeMidiNote(-1),
     keyboardComponent (keyboardState, MidiKeyboardComponent::horizontalKeyboard),
-    activeToneGenerator(&sineToneGenerator),
     startTime (Time::getMillisecondCounterHiRes() * 0.001)
 {
     // specify the number of input and output channels that we want to open
-    setAudioChannels (2, 2);
+    setAudioChannels (0, 1);
 
     addAndMakeVisible (levelSlider);
     levelSlider.setRange (0, 1);
@@ -34,9 +32,9 @@ MainContentComponent::MainContentComponent() :
     midiInputListLabel.setText ("MIDI Input:", dontSendNotification);
     midiInputListLabel.attachToComponent (&midiInputList, true);
 
-    waveformMap[String("Sine")] = &sineToneGenerator;
-    waveformMap[String("Saw")] = &sawToneGenerator;
-    waveformMap[String("Square")] = &squareToneGenerator;
+    waveformMap[String("Sine")] = Sine;
+    waveformMap[String("Saw")] = Saw;
+    waveformMap[String("Square")] = Square;
     addAndMakeVisible (waveformList);
     int nextId = 1;
     for(auto it = waveformMap.begin(); it != waveformMap.end(); it++) {
@@ -97,6 +95,7 @@ MainContentComponent::~MainContentComponent()
 
     delete filterComponent;
     delete delayComponent;
+    clearToneGenerators();
 }
 
 
@@ -105,9 +104,6 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
     filter.prepareToPlay(sampleRate, samplesPerBlockExpected);
     delay.prepareToPlay(sampleRate, samplesPerBlockExpected);
     currentSampleRate = sampleRate;
-
-    // Needed to refresh samplerate and reset playback
-    updateToneGenerator(activeToneGenerator);
 }
 
 void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
@@ -118,9 +114,16 @@ void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& buff
     // NOTE this synth is mono, so there will only ever be one channel.
     float* const buffer = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
 
+    playLock.enter();
     for (int sample = 0; sample < bufferToFill.numSamples; ++sample) {
-        buffer[sample] = std::max(0.0, std::min(1.0, activeToneGenerator->getSample() * level));
+      buffer[sample] = 0.0f;
+      for(auto it = noteToneGenerator.begin(); it != noteToneGenerator.end(); it++) {
+        float played = (it->second->getSample() * level);
+        buffer[sample] = std::max(0.0f, std::min(1.0f,
+              buffer[sample] + played));
+      }
     }
+    playLock.exit();
 
     MidiBuffer dummyMidi;
     filter.processBlock(*bufferToFill.buffer, dummyMidi);
@@ -167,12 +170,6 @@ void MainContentComponent::resized()
 	waveformList.setSize(100, 50);
 	filterComponent->setBounds(area.removeFromBottom(100).reduced(8));
 	delayComponent->setBounds(area.removeFromBottom(116).reduced(8));
-}
-
-void MainContentComponent::updateToneGenerator(ToneGenerator *toneGenerator) {
-  activeToneGenerator = toneGenerator;
-  toneGenerator->setSampleRate(currentSampleRate);
-  toneGenerator->setFrequency(0);
 }
 
 
@@ -224,14 +221,14 @@ void MainContentComponent::setMidiInput (int index)
     lastInputIndex = index;
 }
 
+MainContentComponent::WaveType MainContentComponent::getActiveToneGenerator() {
+  return waveformMap[waveformList.getItemText(waveformList.getSelectedItemIndex())];
+}
+
 void MainContentComponent::comboBoxChanged (ComboBox* box)
 {
     if (box == &midiInputList) {
       setMidiInput (midiInputList.getSelectedItemIndex());
-    }
-    else if (box == &waveformList) {
-      updateToneGenerator(waveformMap[
-          waveformList.getItemText(waveformList.getSelectedItemIndex())]);
     }
 }
 
@@ -250,8 +247,23 @@ void MainContentComponent::handleNoteOn (MidiKeyboardState*, int midiChannel, in
         MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
-        activeToneGenerator->setFrequency(getFrequency(m));
-        activeMidiNote = midiNoteNumber;
+
+        playLock.enter();
+        switch(getActiveToneGenerator()) {
+          case Sine:
+            noteToneGenerator[midiNoteNumber] = new SineToneGenerator();
+            break;
+          case Saw:
+            noteToneGenerator[midiNoteNumber] = new SawToneGenerator();
+            break;
+          default:
+            noteToneGenerator[midiNoteNumber] = new SquareToneGenerator();
+            break;
+        }
+
+        noteToneGenerator[midiNoteNumber]->setSampleRate(currentSampleRate);
+        noteToneGenerator[midiNoteNumber]->setFrequency(getFrequency(m));
+        playLock.exit();
     }
 }
 
@@ -261,12 +273,21 @@ void MainContentComponent::handleNoteOff (MidiKeyboardState*, int midiChannel, i
         MidiMessage m (MidiMessage::noteOff (midiChannel, midiNoteNumber));
         m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
         postMessageToList (m, "On-Screen Keyboard");
-        if(activeMidiNote == midiNoteNumber) {
-          // If note off message is sent for a different note than the one actually
-          // playing, ignore it.
-          activeToneGenerator->setFrequency(0.0);
+
+        auto it = noteToneGenerator.find(midiNoteNumber);
+        if(it != noteToneGenerator.end()) {
+          playLock.enter();
+          noteToneGenerator.erase(midiNoteNumber);
+          delete it->second;
+          playLock.exit();
         }
     }
+}
+
+void MainContentComponent::clearToneGenerators() {
+  for(auto it = noteToneGenerator.begin(); it != noteToneGenerator.end(); it++) {
+    delete it->second;
+  }
 }
 
 double MainContentComponent::getFrequency(MidiMessage m){
