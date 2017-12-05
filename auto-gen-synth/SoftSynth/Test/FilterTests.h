@@ -13,6 +13,8 @@
 
 class FilterTests : public CxxTestSuite.h {
     FilterProcessor filter;
+    AudioSampleBuffer aBuffer;
+    MidiBuffer mBuffer;
     
 public:
     void setUp() {
@@ -23,8 +25,15 @@ public:
         delete filter;
     }
     
+    void testPrepareToPlay() {
+        filter.prepareToPlay(2.0f, 3);
+        TS_ASSERT_EQUALS(filter.sampleRate, 2.0f);
+    }
+    
     void testProcessBlock() {
+        filter.testProcessBlock(aBuffer, mBuffer);
         
+        TS_ASSERT_EQUALS(filter.delayLine.empty(), true);
     }
     
     void testProcessSample() {
