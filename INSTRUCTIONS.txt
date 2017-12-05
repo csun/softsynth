@@ -1,0 +1,21 @@
+Instructions for building & use of SoftSynth.
+
+Building:
+
+	To build this project on your own system, you need to download the JUCE
+	framework and the Projucer. The Projucer is a program developed by JUCE
+	that allows you to export projects into the IDE of your choice. While 
+	this is a downside to using the framework, it makes the running of JUCE
+	code on different platforms very straightforward. 
+
+Running the binary:
+	
+	The binary can be built on Windows, Mac, and Linux systems, and we will 
+	include binaries for each platform with the final submission. 
+
+Instructions for use:
+		
+	If you wish to use your own MIDI controller, it should be plugged in
+	and turned on before launching the program, otherwise, it will not 
+	be recognized. If you do not have a MIDI controller, it will default
+	to the computer keyboard to control the synthesizer.

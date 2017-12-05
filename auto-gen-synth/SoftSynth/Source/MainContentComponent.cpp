@@ -13,7 +13,7 @@ MainContentComponent::MainContentComponent() :
     addAndMakeVisible (levelSlider);
     levelSlider.setRange (0, 1);
     levelSlider.setValue (0.125);
-	levelSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
+	levelSlider.setSliderStyle(Slider::SliderStyle::Rotary);
 	levelSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 
 
@@ -81,7 +81,7 @@ MainContentComponent::MainContentComponent() :
     midiMessagesBox.setColour (TextEditor::shadowColourId, Colour (0x16000000));
 
     setOpaque (true);
-    setSize(700, 700);
+    setSize(700, 600);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -151,7 +151,7 @@ void MainContentComponent::paint (Graphics& g)
   g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 	g.setFont(Font("Helvetica", 60.0f, Font::bold));
 	g.setColour(Colours::limegreen);
-	g.drawText("SoftSynth", getLocalBounds().removeFromBottom(680).removeFromRight(300), Justification::centred, true);
+	g.drawText("SoftSynth", getLocalBounds().removeFromTop(300).removeFromRight(300), Justification::centred, true);
 }
 
 void MainContentComponent::resized()
@@ -166,10 +166,10 @@ void MainContentComponent::resized()
 	levelSlider.setBounds(area.removeFromTop(90).removeFromRight (getWidth()-70));
 	levelLabel.setJustificationType(Justification::centredLeft);
 	levelSlider.setSize(100, 100);
-	waveformList.setBounds(area.removeFromTop(90).removeFromRight(getWidth() - 95).removeFromLeft(getWidth() - 450));
+	waveformList.setBounds(area.removeFromTop(90).removeFromRight(getWidth() - 95).removeFromLeft(getWidth() - 50));
 	waveformList.setSize(100, 50);
-	filterComponent->setBounds(area.removeFromBottom(100).reduced(8));
-	delayComponent->setBounds(area.removeFromBottom(116).reduced(8));
+	filterComponent->setBounds(area.removeFromBottom(91).reduced(8));
+	delayComponent->setBounds(area.removeFromBottom(140).reduced(8));
 }
 
 
