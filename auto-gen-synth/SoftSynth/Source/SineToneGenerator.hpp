@@ -1,6 +1,9 @@
 #ifndef _SINETONEGENERATOR_H_
 #define _SINETONEGENERATOR_H_
 
+
+#define M_PI 3.141
+
 #include "ToneGenerator.hpp"
 
 
