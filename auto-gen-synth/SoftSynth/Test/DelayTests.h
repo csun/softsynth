@@ -8,10 +8,11 @@
 #ifndef DelayTests_h
 #define DelayTests_h
 
-#include <Source/FilterProcessor.h>
+#include "../Source/DelayProcessor.h"
+#include "../Source/FilterProcessor.h"
 #include <cxxtest/TestSuite.h>
 
-class DelayTests : public CxxTestSuite.h {
+class DelayTests : public CxxTest::TestSuite {
     DelayProcessor delay;
     AudioSampleBuffer aBuffer;
     MidiBuffer mBuffer;
@@ -21,7 +22,6 @@ public:
         delay = new DelayProcessor();
         aBuffer = new AudioSampleBuffer();
         mBuffer = new MidiBuffer();
-        
     }
     
     void tearDown() {

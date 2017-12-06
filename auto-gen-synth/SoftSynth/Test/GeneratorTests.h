@@ -13,7 +13,7 @@
 #include <Source/SquareToneGenerator.h>
 #include <cxxtest/TestSuite.h>
 
-class GeneratorTests : public CxxTestSuite.h {
+class GeneratorTests : public CxxTest::TestSuite {
     SineToneGenerator sine;
     SquareToneGenerator square;
     SawToneGenerator sine;

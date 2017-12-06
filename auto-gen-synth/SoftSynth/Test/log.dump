@@ -1,0 +1,195 @@
+DelayTests.cpp:27:48: error: ‘constexpr’ needed for in-class initialization of static data member ‘CxxTest::List DelayTests::Tests_DelayTests’ of non-integral type [-fpermissive]
+ static CxxTest::List Tests_DelayTests = { 0, 0 };
+                                                ^
+DelayTests.cpp:28:62: error: expected identifier before string constant
+ CxxTest::StaticSuiteDescription suiteDescription_DelayTests( "DelayTests.h", 15, "DelayTests", suite_DelayTests, Tests_DelayTests );
+                                                              ^
+DelayTests.cpp:28:62: error: expected ‘,’ or ‘...’ before string constant
+In file included from cxxtest-4.4/cxxtest/Root.cpp:20:0,
+                 from DelayTests.cpp:54:
+cxxtest-4.4/cxxtest/ValueTraits.cpp:17:1: error: expected unqualified-id before ‘namespace’
+ namespace CxxTest
+ ^
+DelayTests.cpp:55:66: error: expected ‘}’ at end of input
+ const char* CxxTest::RealWorldDescription::_worldName = "cxxtest";
+                                                                  ^
+In file included from DelayTests.cpp:23:0:
+DelayTests.h: In member function ‘virtual void DelayTests::setUp()’:
+DelayTests.h:22:15: error: no match for ‘operator=’ (operand types are ‘DelayProcessor’ and ‘DelayProcessor*’)
+         delay = new DelayProcessor();
+               ^
+In file included from /home/csun/JUCE/modules/juce_core/system/juce_StandardHeader.h:56:0,
+                 from /home/csun/JUCE/modules/juce_core/juce_core.h:178,
+                 from /home/csun/JUCE/modules/juce_audio_basics/juce_audio_basics.h:52,
+                 from ../Source/../JuceLibraryCode/JuceHeader.h:17,
+                 from ../Source/DelayProcessor.h:4,
+                 from DelayTests.h:11,
+                 from DelayTests.cpp:23:
+/home/csun/JUCE/modules/juce_core/system/juce_PlatformDefs.h:195:16: note: candidate: DelayProcessor& DelayProcessor::operator=(const DelayProcessor&) <deleted>
+     className& operator= (const className&) JUCE_DELETED_FUNCTION;
+                ^
+/home/csun/JUCE/modules/juce_core/system/juce_PlatformDefs.h:201:5: note: in expansion of macro ‘JUCE_DECLARE_NON_COPYABLE’
+     JUCE_DECLARE_NON_COPYABLE(className) \
+     ^
+../Source/DelayProcessor.h:47:5: note: in expansion of macro ‘JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR’
+     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayProcessor)
+     ^
+/home/csun/JUCE/modules/juce_core/system/juce_PlatformDefs.h:195:16: note:   no known conversion for argument 1 from ‘DelayProcessor*’ to ‘const DelayProcessor&’
+     className& operator= (const className&) JUCE_DELETED_FUNCTION;
+                ^
+/home/csun/JUCE/modules/juce_core/system/juce_PlatformDefs.h:201:5: note: in expansion of macro ‘JUCE_DECLARE_NON_COPYABLE’
+     JUCE_DECLARE_NON_COPYABLE(className) \
+     ^
+../Source/DelayProcessor.h:47:5: note: in expansion of macro ‘JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR’
+     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayProcessor)
+     ^
+In file included from DelayTests.cpp:23:0:
+DelayTests.h:23:17: error: no match for ‘operator=’ (operand types are ‘juce::AudioSampleBuffer {aka juce::AudioBuffer<float>}’ and ‘juce::AudioSampleBuffer* {aka juce::AudioBuffer<float>*}’)
+         aBuffer = new AudioSampleBuffer();
+                 ^
+In file included from /home/csun/JUCE/modules/juce_audio_basics/juce_audio_basics.h:85:0,
+                 from ../Source/../JuceLibraryCode/JuceHeader.h:17,
+                 from ../Source/DelayProcessor.h:4,
+                 from DelayTests.h:11,
+                 from DelayTests.cpp:23:
+/home/csun/JUCE/modules/juce_audio_basics/buffers/juce_AudioSampleBuffer.h:155:18: note: candidate: juce::AudioBuffer<Type>& juce::AudioBuffer<Type>::operator=(const juce::AudioBuffer<Type>&) [with Type = float]
+     AudioBuffer& operator= (const AudioBuffer& other)
+                  ^
+/home/csun/JUCE/modules/juce_audio_basics/buffers/juce_AudioSampleBuffer.h:155:18: note:   no known conversion for argument 1 from ‘juce::AudioSampleBuffer* {aka juce::AudioBuffer<float>*}’ to ‘const juce::AudioBuffer<float>&’
+/home/csun/JUCE/modules/juce_audio_basics/buffers/juce_AudioSampleBuffer.h:206:18: note: candidate: juce::AudioBuffer<Type>& juce::AudioBuffer<Type>::operator=(juce::AudioBuffer<Type>&&) [with Type = float]
+     AudioBuffer& operator= (AudioBuffer&& other) noexcept
+                  ^
+/home/csun/JUCE/modules/juce_audio_basics/buffers/juce_AudioSampleBuffer.h:206:18: note:   no known conversion for argument 1 from ‘juce::AudioSampleBuffer* {aka juce::AudioBuffer<float>*}’ to ‘juce::AudioBuffer<float>&&’
+In file included from DelayTests.cpp:23:0:
+DelayTests.h:24:17: error: no match for ‘operator=’ (operand types are ‘juce::MidiBuffer’ and ‘juce::MidiBuffer*’)
+         mBuffer = new MidiBuffer();
+                 ^
+In file included from /home/csun/JUCE/modules/juce_audio_basics/juce_audio_basics.h:94:0,
+                 from ../Source/../JuceLibraryCode/JuceHeader.h:17,
+                 from ../Source/DelayProcessor.h:4,
+                 from DelayTests.h:11,
+                 from DelayTests.cpp:23:
+/home/csun/JUCE/modules/juce_audio_basics/midi/juce_MidiBuffer.h:54:17: note: candidate: juce::MidiBuffer& juce::MidiBuffer::operator=(const juce::MidiBuffer&)
+     MidiBuffer& operator= (const MidiBuffer&) noexcept;
+                 ^
+/home/csun/JUCE/modules/juce_audio_basics/midi/juce_MidiBuffer.h:54:17: note:   no known conversion for argument 1 from ‘juce::MidiBuffer*’ to ‘const juce::MidiBuffer&’
+In file included from DelayTests.cpp:23:0:
+DelayTests.h: In member function ‘virtual void DelayTests::tearDown()’:
+DelayTests.h:28:16: error: type ‘class DelayProcessor’ argument given to ‘delete’, expected pointer
+         delete delay;
+                ^
+DelayTests.h:29:16: error: type ‘juce::AudioSampleBuffer {aka class juce::AudioBuffer<float>}’ argument given to ‘delete’, expected pointer
+         delete aBuffer;
+                ^
+DelayTests.h:30:16: error: type ‘class juce::MidiBuffer’ argument given to ‘delete’, expected pointer
+         delete mBuffer;
+                ^
+In file included from cxxtest-4.4/cxxtest/RealDescriptions.h:20:0,
+                 from cxxtest-4.4/cxxtest/TestRunner.h:22,
+                 from DelayTests.cpp:10:
+DelayTests.h: In member function ‘void DelayTests::testPrepareToPlay()’:
+DelayTests.h:35:32: error: ‘class DelayProcessor’ has no member named ‘sampleRate’
+         TS_ASSERT_EQUALS(delay.sampleRate, 2.0f);
+                                ^
+cxxtest-4.4/cxxtest/TestSuite.h:393:84: note: in definition of macro ‘___ETS_ASSERT_EQUALS’
+ #   define ___ETS_ASSERT_EQUALS(f,l,x,y,m) CxxTest::doAssertEquals( (f), (l), #x, (x), #y, (y), (m) )
+                                                                                    ^
+cxxtest-4.4/cxxtest/TestSuite.h:397:39: note: in expansion of macro ‘___TS_ASSERT_EQUALS’
+ #   define _TS_ASSERT_EQUALS(f,l,x,y) ___TS_ASSERT_EQUALS(f,l,x,y,0)
+                                       ^
+cxxtest-4.4/cxxtest/TestSuite.h:400:34: note: in expansion of macro ‘_TS_ASSERT_EQUALS’
+ #   define TS_ASSERT_EQUALS(x,y) _TS_ASSERT_EQUALS(__FILE__,__LINE__,x,y)
+                                  ^
+DelayTests.h:35:9: note: in expansion of macro ‘TS_ASSERT_EQUALS’
+         TS_ASSERT_EQUALS(delay.sampleRate, 2.0f);
+         ^
+In file included from DelayTests.cpp:23:0:
+DelayTests.h: In member function ‘void DelayTests::testProcessBlock()’:
+DelayTests.h:39:15: error: ‘class DelayProcessor’ has no member named ‘testProcessBlock’
+         delay.testProcessBlock(aBuffer, mBuffer);
+               ^
+In file included from DelayTests.h:11:0,
+                 from DelayTests.cpp:23:
+../Source/DelayProcessor.h:45:23: error: ‘std::deque<float> DelayProcessor::delayLine’ is protected
+     std::deque<float> delayLine;
+                       ^
+In file included from cxxtest-4.4/cxxtest/RealDescriptions.h:20:0,
+                 from cxxtest-4.4/cxxtest/TestRunner.h:22,
+                 from DelayTests.cpp:10:
+DelayTests.h:41:32: error: within this context
+         TS_ASSERT_EQUALS(delay.delayLine.empty(), true);
+                                ^
+cxxtest-4.4/cxxtest/TestSuite.h:393:84: note: in definition of macro ‘___ETS_ASSERT_EQUALS’
+ #   define ___ETS_ASSERT_EQUALS(f,l,x,y,m) CxxTest::doAssertEquals( (f), (l), #x, (x), #y, (y), (m) )
+                                                                                    ^
+cxxtest-4.4/cxxtest/TestSuite.h:397:39: note: in expansion of macro ‘___TS_ASSERT_EQUALS’
+ #   define _TS_ASSERT_EQUALS(f,l,x,y) ___TS_ASSERT_EQUALS(f,l,x,y,0)
+                                       ^
+cxxtest-4.4/cxxtest/TestSuite.h:400:34: note: in expansion of macro ‘_TS_ASSERT_EQUALS’
+ #   define TS_ASSERT_EQUALS(x,y) _TS_ASSERT_EQUALS(__FILE__,__LINE__,x,y)
+                                  ^
+DelayTests.h:41:9: note: in expansion of macro ‘TS_ASSERT_EQUALS’
+         TS_ASSERT_EQUALS(delay.delayLine.empty(), true);
+         ^
+In file included from DelayTests.h:11:0,
+                 from DelayTests.cpp:23:
+../Source/DelayProcessor.h: In member function ‘void DelayTests::testProcessSample()’:
+../Source/DelayProcessor.h:45:23: error: ‘std::deque<float> DelayProcessor::delayLine’ is protected
+     std::deque<float> delayLine;
+                       ^
+In file included from DelayTests.cpp:23:0:
+DelayTests.h:46:15: error: within this context
+         delay.delayLine = delayL;
+               ^
+In file included from DelayTests.h:11:0,
+                 from DelayTests.cpp:23:
+../Source/DelayProcessor.h:36:10: error: ‘void DelayProcessor::processSample(float&)’ is protected
+     void processSample(float &sample);
+          ^
+In file included from DelayTests.cpp:23:0:
+DelayTests.h:50:33: error: within this context
+         delay.processSample(samp);
+                                 ^
+In file included from DelayTests.h:11:0,
+                 from DelayTests.cpp:23:
+../Source/DelayProcessor.h: In member function ‘void DelayTests::testResizeDelayLine()’:
+../Source/DelayProcessor.h:37:10: error: ‘void DelayProcessor::resizeDelayLine()’ is protected
+     void resizeDelayLine();
+          ^
+In file included from DelayTests.cpp:23:0:
+DelayTests.h:57:31: error: within this context
+         delay.resizeDelayLine();
+                               ^
+In file included from DelayTests.h:11:0,
+                 from DelayTests.cpp:23:
+../Source/DelayProcessor.h:45:23: error: ‘std::deque<float> DelayProcessor::delayLine’ is protected
+     std::deque<float> delayLine;
+                       ^
+In file included from DelayTests.cpp:23:0:
+DelayTests.h:58:34: error: within this context
+         float delayFloat = delay.delayLine.pop_front();
+                                  ^
+DelayTests.h:58:54: error: void value not ignored as it ought to be
+         float delayFloat = delay.delayLine.pop_front();
+                                                      ^
+DelayTests.cpp: In constructor ‘DelayTests::TestDescription_suite_DelayTests_testPrepareToPlay::TestDescription_suite_DelayTests_testPrepareToPlay()’:
+DelayTests.cpp:32:158: error: invalid use of non-static member function
+  TestDescription_suite_DelayTests_testPrepareToPlay() : CxxTest::RealTestDescription( Tests_DelayTests, suiteDescription_DelayTests, 33, "testPrepareToPlay" ) {}
+                                                                                                                                                              ^
+DelayTests.cpp: In constructor ‘DelayTests::TestDescription_suite_DelayTests_testProcessBlock::TestDescription_suite_DelayTests_testProcessBlock()’:
+DelayTests.cpp:38:156: error: invalid use of non-static member function
+  TestDescription_suite_DelayTests_testProcessBlock() : CxxTest::RealTestDescription( Tests_DelayTests, suiteDescription_DelayTests, 38, "testProcessBlock" ) {}
+                                                                                                                                                            ^
+DelayTests.cpp: In constructor ‘DelayTests::TestDescription_suite_DelayTests_testProcessSample::TestDescription_suite_DelayTests_testProcessSample()’:
+DelayTests.cpp:44:158: error: invalid use of non-static member function
+  TestDescription_suite_DelayTests_testProcessSample() : CxxTest::RealTestDescription( Tests_DelayTests, suiteDescription_DelayTests, 44, "testProcessSample" ) {}
+                                                                                                                                                              ^
+DelayTests.cpp: In constructor ‘DelayTests::TestDescription_suite_DelayTests_testResizeDelayLine::TestDescription_suite_DelayTests_testResizeDelayLine()’:
+DelayTests.cpp:50:162: error: invalid use of non-static member function
+  TestDescription_suite_DelayTests_testResizeDelayLine() : CxxTest::RealTestDescription( Tests_DelayTests, suiteDescription_DelayTests, 55, "testResizeDelayLine" ) {}
+                                                                                                                                                                  ^
+DelayTests.cpp: At global scope:
+DelayTests.cpp:51:59: error: expected unqualified-id at end of input
+  void runTest() { suite_DelayTests.testResizeDelayLine(); }
+                                                           ^
+make: *** [runner] Error 1

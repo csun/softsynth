@@ -8,10 +8,10 @@
 #ifndef FilterTests_h
 #define FilterTests_h
 
-#include <Source/FilterProcessor.h>
+#include "../Source/FilterProcessor.h"
 #include <cxxtest/TestSuite.h>
 
-class FilterTests : public CxxTestSuite.h {
+class FilterTests : public CxxTest::TestSuite {
     FilterProcessor filter;
     AudioSampleBuffer aBuffer;
     MidiBuffer mBuffer;
