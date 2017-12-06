@@ -19,3 +19,14 @@ Instructions for use:
 	and turned on before launching the program, otherwise, it will not 
 	be recognized. If you do not have a MIDI controller, it will default
 	to the computer keyboard to control the synthesizer.
+
+	To play notes, simply click on the on screen keyboard, press the computer
+	keyboard or your own MIDI controller. 
+	
+	To alter the effect parameters, drag in the space right of the parameter title
+	to change the amount, or whether a parameter is on or off. 
+
+	If you wish to change the wave shape, you can click on the wave shape drop down
+	and select a new wave shape.
+
+	To quit the program, simply close the window.
