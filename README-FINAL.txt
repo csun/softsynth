@@ -48,3 +48,7 @@ Dynamic Memory Management
 - We also create the filter and delay components dynamically, so the program
   deletes them, as well as clears the tone generator map.
 
+DEMO VIDEO LINKS 
+Part 1 : https://youtu.be/FULLyt2iPEs
+Part 2 : https://youtu.be/iKe-GC_JHFQ
+
